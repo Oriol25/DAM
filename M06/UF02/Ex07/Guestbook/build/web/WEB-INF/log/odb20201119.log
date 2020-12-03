@@ -1,0 +1,14 @@
+------------------------------------------------------------------------------------------------------------------------
+
+[2020-11-19 18:02:29 #1 store] 
+Database 'C:\Users\Alumne\Documents\NetBeansProjects\Guestbook\build\web\WEB-INF\db\guest.odb' is opened by 5568@AI104-PC13
+
+[2020-11-19 18:02:29 #2 store] 
+Configuration path: ?
+
+[2020-11-19 18:02:30 #3 type] 
+Type guest.Guest is not enhanced.
+
+[2020-11-19 18:04:08 #4 store] 
+Database 'C:\Users\Alumne\Documents\NetBeansProjects\Guestbook\build\web\WEB-INF\db\guest.odb' is closed by 5568@AI104-PC13
+
