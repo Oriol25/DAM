@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<cotxes>
+    <cotxes id="0" marca="Ctiroen" matricula="9865AZF" model="Matiz"/>
+    <cotxes id="1" marca="Ford" matricula="9658GHJ" model="Mustang"/>
+    <cotxes id="2" marca="BMW" matricula="6587GVB" model="M4"/>
+</cotxes>
