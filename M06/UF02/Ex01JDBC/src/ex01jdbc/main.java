@@ -21,14 +21,14 @@ public class main {
     public static final String PASSWORD = "";
      
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException {
        mostrarOpciones();
         
     }
     
     public static Connection connection () {
      
-         Connection connection = null;
+        Connection connection = null;
 
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
@@ -40,45 +40,18 @@ public class main {
         return connection;
     }
     
-    public static void mostrarOpciones() {
-        
-        Scanner teclado = new Scanner(System.in);
-        int opcion = 0;
-        
-        while (opcion != 3) {
-            
-            System.out.println("1. Modificar tabla de alumnos");
-            System.out.println("2. Modificar tabla de poblaciones");
-            System.out.println("3. Salir");
-            opcion = teclado.nextInt();
-            
-            switch (opcion) {
-                case 1:
-                    System.out.println("\n\n1. Añadir alumnos");
-                    System.out.println("2. Modificar alumnos");
-                    System.out.println("3. Eliminar alumnos");
-                    opcion = teclado.nextInt();
-                    
-                    if (opcion == 1) {
-                        anadirAlumno();
-                    } else if (opcion == 2){
-                        
-                    } else if (opcion == 3)
-                    
-                    break;
-                case 2:
-                    break;
-               
-            }
-            
-            opcion = 0;
-            
-        }
-    }
+    
     
     public static void anadirAlumno() throws SQLException {
         
-        Connection connection = connection();
+        Connection connection = null;
+   
+        try { 
+            connection = connection();
+        } catch (Exception e) {
+            System.out.println("Error al conectar con la base de datos");
+
+        }
         
         Scanner teclado = new Scanner(System.in);
         
@@ -118,6 +91,42 @@ public class main {
                 sexo + "', '" + cp + "', '" + poblacion + "');");*/
         
         connection.close();
+    }
+    
+    public static void mostrarOpciones() throws SQLException {
+        
+        Scanner teclado = new Scanner(System.in);
+        int opcion = 0;
+        
+        while (opcion != 3) {
+            
+            System.out.println("1. Modificar tabla de alumnos");
+            System.out.println("2. Modificar tabla de poblaciones");
+            System.out.println("3. Salir");
+            opcion = teclado.nextInt();
+            
+            switch (opcion) {
+                case 1:
+                    System.out.println("\n\n1. Añadir alumnos");
+                    System.out.println("2. Modificar alumnos");
+                    System.out.println("3. Eliminar alumnos");
+                    opcion = teclado.nextInt();
+                    
+                    if (opcion == 1) {
+                        anadirAlumno();
+                    } else if (opcion == 2){
+                        
+                    } else if (opcion == 3)
+                    
+                    break;
+                case 2:
+                    break;
+               
+            }
+            
+            opcion = 0;
+            
+        }
     }
     
 }
