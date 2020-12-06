@@ -15,15 +15,13 @@ import javax.swing.JOptionPane;
 
 public class main {
     
-    
     public static final String URL = "jdbc:mysql://localhost:3306/ex01";
     public static final String USERNAME = "root";
     public static final String PASSWORD = "";
      
-
     public static void main(String[] args) throws SQLException {
        mostrarOpciones();
-        
+               
     }
     
     public static Connection connection () {
@@ -37,10 +35,9 @@ public class main {
         } catch (Exception e) {
             System.out.println("Error al conectar con la base de datos");
         }
+        
         return connection;
     }
-    
-    
     
     public static void anadirAlumno() throws SQLException {
         
@@ -60,20 +57,20 @@ public class main {
         int cp = 0;
         String poblacion = "";
         
-        System.out.print("Introduce el nombre");
+        System.out.print("Introduce el nombre: ");
         nombre = teclado.nextLine();
         
-        System.out.print("Introduce el dni");
+        System.out.print("Introduce el dni: ");
         dni = teclado.nextLine();
         
-        System.out.print("Introduce la fecha (yyyy-mm-dd)");
+        System.out.print("Introduce la fecha (yyyy-mm-dd): ");
         fecha = teclado.nextLine();
         
-        System.out.print("Introduce la dirección postal");
+        System.out.print("Introduce la dirección postal: ");
         direccionPostal = teclado.nextLine();
         
-        System.out.print("Sexo? H: Hombre M: Mujer N: No especificado");
-        sexo = teclado.next().charAt(1);
+        System.out.print("Sexo? H: Hombre M: Mujer N: No especificado: ");
+        sexo = teclado.next().charAt(0);
         
         if (sexo != 'H' && sexo != 'M') {
             sexo = 'N';   
@@ -82,15 +79,61 @@ public class main {
         System.out.print("Codigo Postal:");
         cp = teclado.nextInt();
         
-        System.out.print("Poblacion:");
-        poblacion = teclado.nextLine();
-        
-        //Statement comando = connection.createStatement();
-        /*comando.executeUpdate("INSERT into alumnes (DNI, Nom, Naixement, Adreca, sexe, CP, Poblacio) "
-                + "VALUES ('" + nombre + "', '" + dni +"', '" + fecha + "', '" + direccionPostal + "', '" +
-                sexo + "', '" + cp + "', '" + poblacion + "');");*/
+        try  {
+            Statement comando = connection.createStatement();
+            comando.executeUpdate("INSERT into alumnes (DNI, Nom, Naixement, Adreca, sexe, CP, Poblacio) "
+                    + "VALUES ('" + nombre + "', '" + dni +"', '" + fecha + "', '" + direccionPostal + "', '" +
+                    sexo + "', '" + cp + "', '" + poblacion + "');");
+        } catch (Exception e) {
+            System.out.println("Error al insertar el alumno " + e);
+          
+        }
         
         connection.close();
+    }
+    
+    public static void modificarAlumno() {
+        
+    }
+    
+    public static void eliminarAlumnos() {
+        
+    }
+    
+    public static void anadirProvincia() throws SQLException {
+        
+        Connection connection = null;
+   
+        try { 
+            connection = connection();
+        } catch (Exception e) {
+            System.out.println("Error al conectar con la base de datos");
+
+        }
+        
+        Scanner teclado = new Scanner(System.in);
+                
+        String poblacio = "";
+        int cp = 0;
+        
+        System.out.print("Nombre de la provincia: ");
+        poblacio = teclado.nextLine();
+        
+        System.out.print("Numero de codigo postal: ");
+        cp = teclado.nextInt();
+        
+        try  {
+            Statement comando = connection.createStatement();
+            comando.executeUpdate("INSERT into poblacio (CP, Poblacio) "
+                    + "VALUES ('" + cp + "', '" + poblacio + "');");
+        } catch (Exception e) {
+            System.out.println("Error al insertar el alumno " + e);
+          
+        }
+        
+        connection.close();
+        
+        
     }
     
     public static void mostrarOpciones() throws SQLException {
@@ -115,7 +158,7 @@ public class main {
                     if (opcion == 1) {
                         anadirAlumno();
                     } else if (opcion == 2){
-                        
+                        anadirProvincia();
                     } else if (opcion == 3)
                     
                     break;
