@@ -83,7 +83,7 @@ public class main {
             Statement comando = connection.createStatement();
             comando.executeUpdate("INSERT into alumnes (DNI, Nom, Naixement, Adreca, sexe, CP, Poblacio) "
                     + "VALUES ('" + nombre + "', '" + dni +"', '" + fecha + "', '" + direccionPostal + "', '" +
-                    sexo + "', '" + cp + "', '" + poblacion + "');");
+                    sexo + "', '" + cp + "');");
         } catch (Exception e) {
             System.out.println("Error al insertar el alumno " + e);
           
@@ -127,7 +127,7 @@ public class main {
             comando.executeUpdate("INSERT into poblacio (CP, Poblacio) "
                     + "VALUES ('" + cp + "', '" + poblacio + "');");
         } catch (Exception e) {
-            System.out.println("Error al insertar el alumno " + e);
+            System.out.println("Error al insertar una poblacion " + e);
           
         }
         
