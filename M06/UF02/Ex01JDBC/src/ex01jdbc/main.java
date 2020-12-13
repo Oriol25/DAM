@@ -21,8 +21,8 @@ public class main {
     public static final String PASSWORD = "";
      
     public static void main(String[] args) throws SQLException {
-       mostrarOpciones();
-               
+       //mostrarOpciones();
+       modificarAlumno();
     }
     
     public static Connection connection () {
@@ -69,7 +69,7 @@ public class main {
         System.out.print("Introduce la dirección postal: ");
         direccionPostal = teclado.nextLine();
         
-        System.out.print("Sexo? H: Hombre M: Mujer N: No especificado: ");
+        System.out.println("Sexo? Hombre [H] Mujer [M] No especificado [N]: ");
         sexo = teclado.next().charAt(0);
         
         if (sexo != 'H' && sexo != 'M') {
@@ -81,8 +81,8 @@ public class main {
         
         try  {
             Statement comando = connection.createStatement();
-            comando.executeUpdate("INSERT into alumnes (DNI, Nom, Naixement, Adreca, sexe, CP, Poblacio) "
-                    + "VALUES ('" + nombre + "', '" + dni +"', '" + fecha + "', '" + direccionPostal + "', '" +
+            comando.executeUpdate("INSERT into alumnes (DNI, Nom, Naixement, Adreca, sexe, CP) "
+                    + "VALUES ('" + dni + "', '" + nombre +"', '" + fecha + "', '" + direccionPostal + "', '" +
                     sexo + "', '" + cp + "');");
         } catch (Exception e) {
             System.out.println("Error al insertar el alumno " + e);
@@ -94,11 +94,60 @@ public class main {
     
     public static void modificarAlumno() {
         
+        Scanner teclado = new Scanner(System.in);
         
+        String nom;
+        String dni;
+        String naixement;
+        String adreca;
+        String sexe;
+        String cp;
+        
+        String select = "";
+        
+        Connection connection = null;
+   
+        try { 
+            connection = connection();
+        } catch (Exception e) {
+            System.out.println("Error al conectar con la base de datos");
+                
+        }
+        
+        //Mostramos las poblaciones y pedimos el codigo postal
+        try {
+            Statement comando = connection.createStatement();
+            ResultSet registro = comando.executeQuery("SELECT * FROM alumnes");
+            
+            while (registro.next()==true) {
+		nom = registro.getString("Nom");
+		dni = registro.getString("DNI");
+		naixement = registro.getString("Naixement");
+		adreca = registro.getString("Adreca");
+		sexe = registro.getString("Sexe");
+		cp = registro.getString("CP");
+                
+                select += "Nom [" + nom + "] ";
+                select += "DNI [" + dni + "] ";
+                select += "Naixement [" + naixement + "] ";
+                select += "Adreca [" + adreca + "] ";
+                select += "Sexe [" + sexe + "] ";
+                select += "CP [" + cp + "]";
+                
+                System.out.println(select);
+                
+                select = "";
+            }    
+                                
+        } catch (Exception e) {
+            System.out.println("Error al modificar una poblacion " + e);         
+        }
         
     }
     
     public static void eliminarAlumnos() {
+        
+        
         
     }
     
@@ -144,6 +193,7 @@ public class main {
         String cp ="";
         String poblacio="";
         String opcioCP ="";
+        int cpInt = 0;
         
         Connection connection = null;
    
@@ -164,35 +214,37 @@ public class main {
                 poblacio = registro.getString("Poblacio");
                 
                 System.out.println(cp + " " + poblacio);
-                
+                                
             }
+            
+            /*se repite porque despues del while es como si la variable registro
+                perdiera su valor*/
+            registro = comando.executeQuery("SELECT * FROM poblacio");
             
             System.out.println("\nEscribe el codigo postal que quieras modificar");
             opcioCP = teclado.next();
             
-            while (true) {
+            while (registro.next()==true) {
                 cp = registro.getString("CP");
-                System.out.println("Modificar poblacion");
+                poblacio = registro.getString("Poblacio");
                 
-                if (opcioCP.equals(cp)) {
-                    
-                    System.out.print("Poblacion [ "+ poblacio +"]: ");
+                if (opcioCP.equals(cp)) {                    
+                    System.out.print("Poblacion ["+ poblacio +"]: ");
+                    teclado.nextLine();
                     poblacio = teclado.nextLine();
+                    
+                    cpInt = Integer.parseInt(cp);
                     
                     try  {
                         Statement comandos = connection.createStatement();
-                        comandos.executeUpdate("UPDATE poblacio SET Poblacio = " + poblacio + " WHERE CP = " + cp + " ;");
+                        comandos.executeUpdate("UPDATE poblacio SET Poblacio = '" + poblacio + "' WHERE CP = " + cpInt + ";");
                     } catch (Exception e) {
-                        System.out.println("Error al insertar una poblacion " + e);
+                        System.out.println("Error en el UDPATE: " + e);
 
-                    }
-                    
-                    break;
-                }
-                
+                    }                 
+                }                               
             }
-            
-            
+           
         } catch (Exception e) {
             System.out.println("Error al modificar una poblacion " + e);
           
