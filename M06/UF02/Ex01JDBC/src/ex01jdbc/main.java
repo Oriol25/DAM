@@ -7,7 +7,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Scanner;
-import javax.swing.JOptionPane;
 
 /**
  *
@@ -21,9 +20,7 @@ public class main {
     public static final String PASSWORD = "";
      
     public static void main(String[] args) throws SQLException {
-        //mostrarOpciones();
-        anadirAlumno();
-        eliminarPoblacion();
+        mostrarOpciones();
     }
     
     public static Connection connection () {
@@ -80,7 +77,8 @@ public class main {
         System.out.print("Codigo Postal:");
         cp = teclado.nextInt();
         
-        try  {
+        try  {           
+            
             Statement comando = connection.createStatement();
             comando.executeUpdate("INSERT into alumnes (DNI, Nom, Naixement, Adreca, sexe, CP) "
                     + "VALUES ('" + dni + "', '" + nombre +"', '" + fecha + "', '" + direccionPostal + "', '" +
@@ -196,9 +194,7 @@ public class main {
     }
     
     public static void mostrarAlumnos() {
-        
-        System.out.println("\n");
-        
+               
         Connection connection = null;
         
         try { 
@@ -222,7 +218,7 @@ public class main {
                 sexe = registro.getString("sexe");
                 cp = registro.getInt("cp");
                 
-                System.out.println("DNI [" + dni + "] Nom [" + nom + "] Naixement [" + naixement + "] Adreça Postal [" + adreca + "] Sexe [" + sexe + "] Codigo Postal [" + cp + "]\n");
+                System.out.println("DNI [" + dni + "] Nom [" + nom + "] Naixement [" + naixement + "] Adreça Postal [" + adreca + "] Sexe [" + sexe + "] Codigo Postal [" + cp + "]");
                                 
             }
             
@@ -248,6 +244,8 @@ public class main {
         String dni,nom,naixement,adreca,sexe;
         int cp;
         String opcioDNI;
+        
+        mostrarAlumnos();
         
         System.out.println("DNI del alumno");
         opcioDNI = teclado.next();
@@ -381,7 +379,7 @@ public class main {
         String dni, nom, naixement, adreca, sexe;
         int cpO, cp, conta = 0;
         int registro;
-        char opcion;
+        char opcion = 0;
         
         Connection connection = null;
    
@@ -397,11 +395,10 @@ public class main {
         
         try {
             Statement comando = connection.createStatement();
-            ResultSet registros = comando.executeQuery("SELECT * FROM alumnes WHERE CP = '" + cpO + "';");
+            ResultSet registros = comando.executeQuery("SELECT * FROM alumnes WHERE '" + cpO + "'");
             
-            while (registros.next()==true) {
-                conta++;
-                                
+            while (registros.next()) {
+                conta++;    
             }
 
         } catch (Exception e) {
@@ -410,12 +407,13 @@ public class main {
         
         if (conta > 0) {
             System.out.println("Hay " + conta + " alumnes que tienen este codigo postal\nSi eliminas la poblacion tambien se eliminaran los alumnos\nSeguro? (Si = S)");
+            opcion = teclado.next().charAt(0);
+        } else {
+            System.out.println("No hay ningun alumno con ese codigo postal, se puede borrar sin problemas");
+            opcion = 'S';
         }
-        opcion = teclado.next().charAt(0);
         
-        
-        
-        
+         
         try {
             
             if ((opcion == 'S') || (opcion == 's')) {
@@ -482,6 +480,8 @@ public class main {
         String nom;
         int cp, opcioCP;
         
+        mostrarPoblaciones();
+        
         System.out.println("Introduce el codigo postal: ");
         opcioCP = teclado.nextInt();
         
@@ -507,6 +507,7 @@ public class main {
         
         Scanner teclado = new Scanner(System.in);
         int opcion = 0;
+        int opcionM = 0;
         
         while (opcion != 3) {
             
@@ -517,54 +518,53 @@ public class main {
             
             switch (opcion) {
                 case 1:
-                    System.out.println("\n\n1. Añadir alumnos");
+                    System.out.println("\n1. Añadir alumnos");
                     System.out.println("2. Modificar alumnos");
                     System.out.println("3. Eliminar alumnos");
                     System.out.println("4. Mostrar alumnos");
                     System.out.println("5. Mostrar un solo alumno");
-                    opcion = teclado.nextInt();
+                    opcionM = teclado.nextInt();
                     
-                    if (opcion == 1) {
+                    if (opcionM == 1) {
                         anadirAlumno();
-                    } else if (opcion == 2){
+                    } else if (opcionM == 2){
                         modificarAlumno();
-                    } else if (opcion == 3) {
+                    } else if (opcionM == 3) {
                         eliminarAlumnos();
-                    } else if (opcion == 4) {
+                    } else if (opcionM == 4) {
                         mostrarAlumnos();
-                    } else if (opcion == 5)  {
+                    } else if (opcionM == 5)  {
                         mostrarUnAlumno();
                     }
                     
                     break;
                 case 2:
                     
-                    System.out.println("\n\n1. Añadir poblacion");
+                    System.out.println("\n1. Añadir poblacion");
                     System.out.println("2. Modificar poblacion");
                     System.out.println("3. Eliminar poblacion");
                     System.out.println("4. Mostrar poblaciones");
-                    System.out.println("3. Mostrar una sola poblacion");
-                    opcion = teclado.nextInt();
+                    System.out.println("5. Mostrar una sola poblacion");
+                    opcionM = teclado.nextInt();
                     
-                    if (opcion == 1) {
+                    if (opcionM == 1) {
                         anadirPoblacion();
-                    } else if (opcion == 2){
+                    } else if (opcionM == 2){
                         modificarPoblacion();
-                    } else if (opcion == 3) {
+                    } else if (opcionM == 3) {
                         eliminarPoblacion();
-                    } else if (opcion == 4) {
+                    } else if (opcionM == 4) {
                         mostrarPoblaciones();
-                    } else if (opcion == 5) {
+                    } else if (opcionM == 5) {
                         mostrarUnaPoblacion();
                     }
                     
                     break;
                
             }
-                        
-            System.out.println("\n\n");
+            
+            System.out.println("\n");
             
         }
-    }
-    
+    }    
 }
