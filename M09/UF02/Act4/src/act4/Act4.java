@@ -5,17 +5,10 @@
  */
 package act4;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.locks.Condition;
-import java.util.concurrent.locks.ReentrantLock;
 
 /**
  *
@@ -40,7 +33,7 @@ public class Act4 {
 	}
     }
     
-        public static int FILS = 4;
+    public static int FILS = 4;
     public static int CLIENTS = 50;
     
     public static void main(String[] args) throws
@@ -48,45 +41,14 @@ public class Act4 {
         
         
         //Variables locales (Para hilos y arrays con la lista de tascas)                
-        ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(10);
-        List<Client> llistaClients= new ArrayList<Client>();
-        int articles = 0;
-        int temps = 0; 
+        ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(FILS);
                         
         //Lanza 25 tascas donde sumara numeros aleatorios
-        for (int i = 0; i < 50; i++) {
-            Client client = new Client(i+1);
-            llistaClients.add(client);
-            
-            articles = (int)(Math.random()*30) + 1;
-                            
-            System.out.println("Creat el client " + (i+1) + " amb " + articles + " articles.");
-            
-            for (int j = 0; j < articles; j++){
-                temps = (int)(Math.random()*7) + 2;
-                System.out.println(temps);
-            }
-            //Thread.sleep(3000);
+        for (int i = 0; i < CLIENTS; i++) {
+            Client client = new Client(i);
+            executor.execute(client);
+            Thread.sleep(3000);
   
-        }
-        
-        /*Crea una array de lista para ejecutar la lista con las tascas 
-            donde se han guardado las sumas*/
-        List <Future<Integer>> llistaResultats;
-        llistaResultats = executor.invokeAll(llistaClients);
-			
-        //Se espera que se terminen los hilos
-        executor.shutdown();
-			
-        //Muestra el resultado
-        for (int i = 0; i < llistaResultats.size(); i++) {
-            Future<Integer> resultat = llistaResultats.get(i);
-            try {
-                System.out.println("Resultat tasca "+i+ " és:" +
-                resultat.get());
-            } catch (InterruptedException | ExecutionException e) {
-					
-            }
         }
     }
 }
