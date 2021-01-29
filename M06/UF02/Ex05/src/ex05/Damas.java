@@ -51,14 +51,14 @@ public class Damas extends javax.swing.JFrame {
 
         Table.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, "X", null, "X", null, "X", null, "X"},
-                {"X", null, "X", null, "X", null, "X", null},
+                {null, "O", null, "O", null, "O", null, "O"},
+                {"O", null, "O", null, "O", null, "O", null},
                 {null, null, null, null, null, null, null, null},
                 {null, null, null, null, null, null, null, null},
                 {null, null, null, null, null, null, null, null},
                 {null, null, null, "", null, null, "", null},
-                {null, "O", null, "O", null, "O", null, "O"},
-                {"O", null, "O", null, "O", null, "O", null}
+                {null, "X", null, "X", null, "X", null, "X"},
+                {"X", null, "X", null, "X", null, "X", null}
             },
             new String [] {
                 "1", "2", "3", "4", "5", "6", "7", "8"
@@ -174,10 +174,7 @@ public class Damas extends javax.swing.JFrame {
             return true;
         } else {
             return false;
-        } 
-        
-        
-        
+        }   
     }
     
     public boolean EsO(int fila,int columna) {
@@ -193,18 +190,41 @@ public class Damas extends javax.swing.JFrame {
         filaOrigen = fila;
         columnaOrigen = columna;
     }
-    // TODO
+
     public boolean movimentValid(int fila,int columna) {
         boolean valid = false;
+        int filaPos = fila - filaOrigen;
+        int columnaPos = columna - columnaOrigen;
         
+        if ((jugaX && (filaPos == -1) && ((columnaPos == 1)))
+                || (columnaPos ==-1)) {
+            valid = true;
+        } else if ((jugaO && (filaPos == -1) && ((columnaPos == 1)))
+                || (columnaPos ==-1)) {
+            valid = true;
+        }
         
-        
+
         return valid;
     }
-    // TODO
+
     public void mou(int fila,int columna){
+        int mou = 0;
+        Table.setValueAt(null, filaOrigen, columnaOrigen);
         
-        
+        if (jugaO) {
+            Table.setValueAt("O", fila, columna);
+            filaOrigen = -1;
+            columnaOrigen = -1;
+            jugaX = true;
+            jugaO = false;
+        } else {
+            Table.setValueAt("X", fila, columna);
+            filaOrigen = -1;
+            columnaOrigen = -1;
+            jugaO = true;
+            jugaX = false;
+        }
         
     }
     
