@@ -56,7 +56,7 @@ public class Damas extends javax.swing.JFrame {
                 {null, null, null, null, null, null, null, null},
                 {null, null, null, null, null, null, null, null},
                 {null, null, null, null, null, null, null, null},
-                {null, null, null, "", null, null, "", null},
+                {null, null, null, null, null, null, null, null},
                 {null, "X", null, "X", null, "X", null, "X"},
                 {"X", null, "X", null, "X", null, "X", null}
             },
