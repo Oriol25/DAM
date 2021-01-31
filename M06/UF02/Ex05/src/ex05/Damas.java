@@ -51,14 +51,14 @@ public class Damas extends javax.swing.JFrame {
 
         Table.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, "O", null, "O", null, "O", null, "O"},
-                {"O", null, "O", null, "O", null, "O", null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
+                {"X", null, "X", null, "X", null, "X", null},
                 {null, "X", null, "X", null, "X", null, "X"},
-                {"X", null, "X", null, "X", null, "X", null}
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {"O", null, "O", null, "O", null, "O", null},
+                {null, "O", null, "O", null, "O", null, "O"}
             },
             new String [] {
                 "1", "2", "3", "4", "5", "6", "7", "8"
@@ -107,48 +107,37 @@ public class Damas extends javax.swing.JFrame {
         int fila = obtenirFilaClicada();
         int columna = obtenirColumnaClicada();
 
-        if (noHiHaOrigen()) {
-            if ((jugaX)&&(EsX(fila,columna))) {
-                ActualitzaNouOrigen(fila,columna);
-            } else if ((jugaO) && (EsO(fila,columna))) {
-                ActualitzaNouOrigen(fila,columna);
+        if(noHiHaOrigen()) {
+            if (jugaX && EsX(fila, columna)) {
+                ActualitzaNouOrigen(fila, columna);
+            } else if (jugaO && EsO(fila, columna)) { 
+                ActualitzaNouOrigen(fila, columna);
             } else {
                 mostraError();
             }
         } else {
-            if (movimentValid(fila,columna)) {
-                if ((esBuit(fila,columna))||(OcupatContrari(fila,columna))) {
-                    mou(fila,columna);
-                } else if (OcupatPropi(fila,columna)) {
-                    ActualitzaNouOrigen(fila,columna);
-                }    
+            if (movimentValid(fila, columna)) {
+                if (esBuit(fila, columna) || OcupatContrari(fila, columna)) {
+                    mou(fila, columna);
+                    ganar(fila,columna);
+                } else if (OcupatPropi(fila, columna)) {
+                    ActualitzaNouOrigen(fila, columna);
+                } 
             } else {
-                mostraErrorMoviment();         
+                    mostraErrorMoviment();
             }
         }
     }//GEN-LAST:event_TableMouseClicked
 
-    public int obtenirFilaClicada(){
-        int fila = 0;
-        fila = Table.getSelectedRow();
-        
-        return fila;
-    }
+    public int obtenirFilaClicada(){return Table.getSelectedRow();}
     
-    public int obtenirColumnaClicada() {
-        int columna = 0;
-        columna = Table.getSelectedColumn();
-        return columna;
-    }
+    public int obtenirColumnaClicada() {return Table.getSelectedColumn();}
     
-    public boolean noHiHaOrigen() {
-        boolean origen = false;
-        
-        if (filaOrigen == - 1 || columnaOrigen == - 1) {
-            origen = true;
-        }
-        
-        return origen;
+    public boolean noHiHaOrigen() {        
+        if (filaOrigen == - 1 || columnaOrigen == - 1)
+            return true;
+        else 
+            return false;
     }
 
     public void mostraError() {
@@ -160,7 +149,6 @@ public class Damas extends javax.swing.JFrame {
     }
     
     public void mostraErrorMoviment() {
-
         JOptionPane.showMessageDialog(null,"Error","Ooohh hi ha hagut un error!",
                 JOptionPane.ERROR_MESSAGE);
         
@@ -170,7 +158,7 @@ public class Damas extends javax.swing.JFrame {
     
     public boolean EsX(int fila,int columna) {
         
-        if ((Table.getValueAt(fila, columna).equals("X"))) {
+        if ((Table.getValueAt(fila, columna) == "X")) {
             return true;
         } else {
             return false;
@@ -179,7 +167,7 @@ public class Damas extends javax.swing.JFrame {
     
     public boolean EsO(int fila,int columna) {
         
-        if ((Table.getValueAt(fila, columna).equals("O"))) {
+        if ((Table.getValueAt(fila, columna) == "O")) {
             return true;
         } else {
             return false;
@@ -192,20 +180,18 @@ public class Damas extends javax.swing.JFrame {
     }
 
     public boolean movimentValid(int fila,int columna) {
-        boolean valid = false;
         int filaPos = fila - filaOrigen;
         int columnaPos = columna - columnaOrigen;
         
-        if ((jugaX && (filaPos == -1) && ((columnaPos == 1)))
-                || (columnaPos ==-1)) {
-            valid = true;
-        } else if ((jugaO && (filaPos == -1) && ((columnaPos == 1)))
-                || (columnaPos ==-1)) {
-            valid = true;
+        if ((jugaX && (filaPos == 1)) && ((columnaPos == 1)
+                || (columnaPos == - 1))) {
+            return true;
+        } else if (((jugaO && (filaPos == - 1)) && ((columnaPos == 1)
+                || (columnaPos == - 1)))) {
+            return true;
+        } else {
+            return false;
         }
-        
-
-        return valid;
     }
 
     public void mou(int fila,int columna){
@@ -214,38 +200,47 @@ public class Damas extends javax.swing.JFrame {
         
         if (jugaO) {
             Table.setValueAt("O", fila, columna);
-            filaOrigen = -1;
-            columnaOrigen = -1;
-            jugaX = true;
-            jugaO = false;
-        } else {
+            filaOrigen = - 1;
+            columnaOrigen = - 1;
+            
+            if (mou == 0 ) {
+                mou = 1;
+                jugaX = true;
+                jugaO = false; 
+            }
+            
+            
+        } else if (jugaX) {
             Table.setValueAt("X", fila, columna);
             filaOrigen = -1;
             columnaOrigen = -1;
-            jugaO = true;
-            jugaX = false;
+            
+            if (mou == 0) {
+                mou = 1;
+                jugaO = true;
+                jugaX = false; 
+            }
+            mou = 0;
         }
         
     }
     
     public boolean OcupatPropi(int fila,int columna) {
-        boolean ocupat = false;
-        
-        if (((jugaX == true && EsX(fila,columna)) == true) || 
-                ((jugaO == true && EsO(fila,columna)) == true)){
-            ocupat = true;    
+        if ((jugaX == true && EsX(fila,columna) == true) || 
+                (jugaO == true && EsO(fila,columna) == true)){
+            return true;    
+        } else {
+            return false;
         }
-        
-        return ocupat;
     }
     
     public boolean OcupatContrari(int fila, int columna) {
-        boolean ocupat = false;
         if (((jugaX == true && EsO(fila,columna)) == true) || 
-                ((jugaO == true && EsX(fila,columna)) == true)){
-            ocupat = true;    
+                (jugaO == true && EsX(fila,columna) == true )){
+            return true;    
+        } else {
+            return false;
         }
-        return ocupat;
     }
 
     public boolean esBuit(int fila, int columna) {
@@ -253,6 +248,20 @@ public class Damas extends javax.swing.JFrame {
             return true;
         } else {
             return false;
+        } 
+    }
+    
+    public void ganar(int fila, int columna) {
+        if (EsX(fila, columna) && fila == 7) {
+            jugaX = false;
+            jugaO = false;
+            JOptionPane.showMessageDialog(null, "Ganan las X", "Ganador", 
+                JOptionPane.OK_OPTION);
+        } else if (EsO(fila, columna) && fila == 0) {
+            jugaX = false; 
+            jugaO = false;
+            JOptionPane.showMessageDialog(null, "Ganan las O", "Ganador", 
+                JOptionPane.OK_OPTION);
         } 
     }
     
