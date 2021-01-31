@@ -22,9 +22,12 @@ public class Damas extends javax.swing.JFrame {
     boolean jugaO = false;
     int filaOrigen = -1;
     int columnaOrigen = -1;
+    Partida partida;
     
     public Damas() {
         initComponents();
+        partida = new Partida("");
+        crearpartida("?");
     }
 
     /**
@@ -100,7 +103,7 @@ public class Damas extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btSortirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSortirActionPerformed
-        // TODO add your handling code here:
+        dispose();
     }//GEN-LAST:event_btSortirActionPerformed
 
     private void TableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TableMouseClicked
@@ -257,12 +260,18 @@ public class Damas extends javax.swing.JFrame {
             jugaO = false;
             JOptionPane.showMessageDialog(null, "Ganan las X", "Ganador", 
                 JOptionPane.OK_OPTION);
+            dispose();
         } else if (EsO(fila, columna) && fila == 0) {
             jugaX = false; 
             jugaO = false;
             JOptionPane.showMessageDialog(null, "Ganan las O", "Ganador", 
                 JOptionPane.OK_OPTION);
+            dispose();
         } 
+    }
+    
+    private void crearpartida(String partida) {
+        
     }
     
     /**
@@ -305,4 +314,6 @@ public class Damas extends javax.swing.JFrame {
     private javax.swing.JButton btSortir;
     private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
+
+    
 }

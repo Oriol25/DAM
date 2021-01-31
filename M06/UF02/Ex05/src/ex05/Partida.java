@@ -27,17 +27,22 @@ public class Partida extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        nuevaPartida = new javax.swing.JButton();
+        cargarPartida = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jButton1.setText("Nueva partida");
-
-        jButton2.setText("Cargar ultima partida");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        nuevaPartida.setText("Nueva partida");
+        nuevaPartida.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                nuevaPartidaActionPerformed(evt);
+            }
+        });
+
+        cargarPartida.setText("Cargar ultima partida");
+        cargarPartida.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cargarPartidaActionPerformed(evt);
             }
         });
 
@@ -48,29 +53,37 @@ public class Partida extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(129, 129, 129)
-                        .addComponent(jButton2))
-                    .addGroup(layout.createSequentialGroup()
                         .addGap(150, 150, 150)
-                        .addComponent(jButton1)))
-                .addContainerGap(138, Short.MAX_VALUE))
+                        .addComponent(nuevaPartida))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(134, 134, 134)
+                        .addComponent(cargarPartida)))
+                .addContainerGap(133, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(82, 82, 82)
-                .addComponent(jButton1)
-                .addGap(34, 34, 34)
-                .addComponent(jButton2)
-                .addContainerGap(138, Short.MAX_VALUE))
+                .addComponent(nuevaPartida)
+                .addGap(31, 31, 31)
+                .addComponent(cargarPartida)
+                .addContainerGap(141, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void cargarPartidaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cargarPartidaActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_cargarPartidaActionPerformed
+
+    private void nuevaPartidaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nuevaPartidaActionPerformed
+        
+        Damas damas = new Damas();
+        damas.setVisible(true);
+        dispose();
+        
+    }//GEN-LAST:event_nuevaPartidaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -109,7 +122,7 @@ public class Partida extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
+    private javax.swing.JButton cargarPartida;
+    private javax.swing.JButton nuevaPartida;
     // End of variables declaration//GEN-END:variables
 }
