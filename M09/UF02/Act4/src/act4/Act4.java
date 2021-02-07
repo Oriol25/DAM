@@ -5,10 +5,9 @@
  */
 package act4;
 
-import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
 
 /**
  *
@@ -16,39 +15,56 @@ import java.util.concurrent.ThreadPoolExecutor;
  */
 public class Act4 {
     
-    //Se crea otra clase donde hay las funciones para sumar
-    static class Client implements Callable<Integer> {
-	//variables globales
-        private int operador1 = 1;
+    static class Client implements Runnable {
+        private int cliente = 1;
+        private int articles = (int) (Math.random()*30 + 1);
         
-        //constructor de la clase Suma
-	public Client(int operador1) {
-            this.operador1 = operador1;
+        //constructor de la clase Client
+	public Client(int cliente) {
+            this.cliente = cliente;
+            System.out.println("Creat el client " + cliente + " amb " + articles + " articles");   
 	}
 		
-        //metodo para hacer la suma
-	@Override
-	public Integer call() throws Exception {
-            return operador1;
-	}
+        //metodo run
+        @Override
+        public void run() {
+            int sec = 1000;
+            int temps;
+            
+            System.out.println("Client " + cliente + " passa per caixa...");
+            
+            for (int i = 1; i < articles; i++) {
+                temps = (int) (Math.random()* 7 + 2);
+                try {
+                    Thread.sleep(temps * sec);
+                }  catch (InterruptedException ex) {
+                    System.err.println(ex);
+                }
+                System.out.println("Client " + cliente + " article " + i + "/ " + articles + " (" + temps + " segons)");
+                
+                if (i == articles) {
+                    System.out.println(" FINALITZAT");
+                }             
+            }            
+        }
     }
     
-    public static int FILS = 4;
-    public static int CLIENTS = 50;
+    public static int TOTALCLIENTS = 50;
+    public static int MILISEC = 3000;
+    public static int HILOS = 5;
     
     public static void main(String[] args) throws
             InterruptedException, ExecutionException  {
+       
+        ScheduledThreadPoolExecutor executor = (ScheduledThreadPoolExecutor) Executors.newScheduledThreadPool (5);
         
-        
-        //Variables locales (Para hilos y arrays con la lista de tascas)                
-        ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(FILS);
-                        
-        //Lanza 25 tascas donde sumara numeros aleatorios
-        for (int i = 0; i < CLIENTS; i++) {
+        for(int i = 0; i <= TOTALCLIENTS; i++) {
             Client client = new Client(i);
+            Thread.sleep(MILISEC);
             executor.execute(client);
-            Thread.sleep(3000);
-  
         }
+       
+        executor.shutdown();
+     
     }
 }
