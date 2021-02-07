@@ -3,6 +3,8 @@ package entity;
 
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -14,7 +16,7 @@ public class Partida  implements java.io.Serializable {
 
 
      private Integer idPartida;
-     private Movimiento movimiento;
+     private Set movimiento = new HashSet(0);
      private Date created;
      private char guanyador;
      
@@ -22,9 +24,8 @@ public class Partida  implements java.io.Serializable {
         this.guanyador = guanyador;
     } 
 
-    public Partida(Movimiento movimiento, Date created, char guanyador) {
+    public Partida(Set movimiento, char guanyador) {
        this.movimiento = movimiento;
-       this.created = created;
        this.guanyador = guanyador;
     }
    
@@ -38,13 +39,12 @@ public class Partida  implements java.io.Serializable {
     public void setIdPartida(Integer idPartida) {
         this.idPartida = idPartida;
     }
-    
-    
-    public Movimiento getMovimiento() {
-        return this.movimiento;
+
+    public Set getMovimiento() {
+        return movimiento;
     }
-    
-    public void setMovimiento(Movimiento movimiento) {
+
+    public void setMovimiento(Set movimiento) {
         this.movimiento = movimiento;
     }
     

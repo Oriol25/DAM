@@ -272,6 +272,8 @@ public class Damas extends javax.swing.JFrame {
     
     private void crearpartida(String partida) {
         
+        
+        
     }
     
     /**
