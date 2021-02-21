@@ -48,8 +48,8 @@ public class Ex06 extends javax.swing.JFrame {
     }
 
 
-class PanelNau extends JPanel implements Runnable, KeyListener{
-    private int numNaus=5;    
+class PanelNau extends JPanel implements Runnable, KeyListener {
+    private int numNaus=3;    
     Nau[] nau;
     private Nau nauNostre;
     
