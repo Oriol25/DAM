@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<Form version="1.3" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
+<Form version="1.5" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="3"/>
   </Properties>
@@ -116,7 +116,6 @@
     <Component class="javax.swing.JButton" name="btPartida">
       <Properties>
         <Property name="text" type="java.lang.String" value="Comen&#xe7;ar Pantalla"/>
-        <Property name="actionCommand" type="java.lang.String" value="Comen&#xe7;ar Pantalla"/>
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
           <Border info="org.netbeans.modules.form.compat2.border.SoftBevelBorderInfo">
             <BevelBorder/>
@@ -151,19 +150,19 @@
           <Properties>
             <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
               <Table columnCount="4" rowCount="4">
-                <Column editable="true" title=" " type="java.lang.String">
+                <Column editable="false" title=" " type="java.lang.String">
                   <Data value=""/>
                   <Data value=""/>
                   <Data value=""/>
                   <Data value=""/>
                 </Column>
-                <Column editable="true" title="" type="java.lang.String">
+                <Column editable="false" title="" type="java.lang.String">
                   <Data value=""/>
                   <Data value=""/>
                   <Data value=""/>
                   <Data value=""/>
                 </Column>
-                <Column editable="true" title="" type="java.lang.String">
+                <Column editable="false" title="" type="java.lang.String">
                   <Data value=""/>
                   <Data value=""/>
                   <Data value=""/>
