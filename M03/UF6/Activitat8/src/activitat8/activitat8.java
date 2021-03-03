@@ -26,7 +26,6 @@ public class activitat8 extends javax.swing.JFrame {
 
     }
    
-    
     private void rellenarTabla() {
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
@@ -220,6 +219,7 @@ public class activitat8 extends javax.swing.JFrame {
             rellenarTablaSecreta();
             contPuntos = 0;
             jTable1.setEnabled(true);
+            jPunts.setText("0");
     }//GEN-LAST:event_btPartidaActionPerformed
 
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
