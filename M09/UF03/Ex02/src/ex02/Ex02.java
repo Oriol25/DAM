@@ -15,13 +15,20 @@ public class Ex02 {
 	
         Scanner teclat = new Scanner(System.in);
         
-        String urlS = "www.insbaixcamp.org";
-        int port = 443;
+        String urlS = args[0];
+        int port = Integer.parseInt(args[1]);
+        String protocol;
+        
+        if (port == 443) {
+            protocol = "https";
+        } else {
+            protocol = "http";
+        }
         
         URLConnection urlCon = null;
         
         try {
-            URL url = new URL("https", urlS, port, "");
+            URL url = new URL(protocol, urlS, port, "");
             
             urlCon = url.openConnection();
 
