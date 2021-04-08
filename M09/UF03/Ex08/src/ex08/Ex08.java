@@ -98,7 +98,7 @@ public class Ex08 {
         //FLUX PER A ENTRADA ESTÀNDARD
 	BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         
-        System.out.println("\nURL (http://www.insbaixcamp.cat/moodle/my)");
+        System.out.println("\nURL (http://www.insbaixcamp.cat/moodle/)");
         url = br.readLine();
         
 	URL obj = new URL(url);
