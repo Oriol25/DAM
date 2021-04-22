@@ -5,20 +5,45 @@
  */
 package ex03;
 
+import ElsMeusBeans.BaseDades;
+import ElsMeusBeans.Comanda;
+import ElsMeusBeans.Producte;
+import ElsMeusBeans.Venda;
+import java.util.ArrayList;
+import java.util.Scanner;
+
 /**
  *
- * @author Alumne
+ * @author Oriol
  */
 public class Exemple {
 
     public static void main(String[] args) {
         
-        String urldb = "";
-        String usuari = "";
+        Scanner teclat = new Scanner(System.in);
+        
+        String urldb = "jdbc:mysql://localhost:3306/fruteria";
+        String usuari = "root";
         String contrasenya = "";
-        String driver = "";
+        String driver = "com.mysql.jdbc.Driver";
+        
+        int producte;
+        int quantitat;
         
         BaseDades bd = new BaseDades(urldb, usuari, contrasenya, driver);
+        bd.setCrearConnexio();
+        
+        if (args.length > 0) {
+            producte = Integer.parseInt(args[0]);
+            quantitat = Integer.parseInt(args[1]);
+            
+        } else {
+            System.out.print("ID DEL PRODUCTE: ");
+            producte = teclat.nextInt();
+            System.out.print("QUANTITAT: ");
+            quantitat = teclat.nextInt();
+            
+        }
         
         if (bd.getCrearConnexio()) {
             System.out.println("Connectat");
@@ -30,7 +55,7 @@ public class Exemple {
             //Crear una venda
             System.out.println("====================================");
             System.out.println("ES CREA VENDA DE ID 3 AMB QUANTITAT 2 ");
-            CrearVenda(bd, 3, 2);
+            CrearVenda(bd, producte, quantitat);
             
             System.out.println("====================================");
             System.out.println("LLISTA PRODUCTES DESPRES DE CREAR VENDA");
@@ -117,7 +142,7 @@ public class Exemple {
     }
     
     private static java.sql.Date getCurrentDate() {
-        java.util.Date avui ) new java.util.Date();
+        java.util.Date avui = new java.util.Date();
         return new java.sql.Date(avui.getTime());
     }
     
