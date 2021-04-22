@@ -28,9 +28,9 @@ public class VeureProductes {
         //Mostra els productes
         while (objects.hasNext()) {
             Producte pro = objects.next();
-            System.out.println((i++) + "\t: " + pro.getDescripcio()
-                    + " *ESTOC.ACT: " + pro.getStockactual() + " *PVP: " + pro.getPvp() +
-                    " *ESTOC.MIN: " + pro.getStockminim());
+            System.out.println((i++) + ": " + pro.getDescripcio()
+                    + "\n\t*ESTOC.ACT: " + pro.getStockactual() + "\n\t*PVP: " + pro.getPvp() +
+                    "\n\t*ESTOC.MIN: " + pro.getStockminim());
         }
         //Es tanca la base de dades
         odb.close();

@@ -19,6 +19,7 @@ import org.neodatis.odb.impl.core.query.values.ValuesCriteriaQuery;
 import ElsMeusBeans.Producte;
 import ElsMeusBeans.Comanda;
 import ElsMeusBeans.Venda;
+import java.util.Scanner;
 
 
 /**
@@ -27,8 +28,19 @@ import ElsMeusBeans.Venda;
  */
 public class OmplirVenda {
     public static void main (String[] args) {
-        int idproducte = 2;
-        int quantitat = 4;
+        
+        Scanner teclat = new Scanner(System.in);
+        
+        int idproducte;
+        int quantitat;
+        
+        try {
+            idproducte = Integer.parseInt(args[0]);
+            quantitat = Integer.parseInt(args[1]);
+        } catch (ArrayIndexOutOfBoundsException e) {
+            idproducte = teclat.nextInt();
+            quantitat = teclat.nextInt();
+        }
         
         ODB odb = ODBFactory.open("Producte_com.BD");
         IQuery query = new CriteriaQuery(Producte.class, 
@@ -37,9 +49,9 @@ public class OmplirVenda {
         
         try {
             Producte pro = (Producte) objectes.getFirst();
-            System.out.println("ID=>" + idproducte + " : " + pro.getDescripcio() +
-                    "*ESTOC-ACT: " + pro.getStockactual() + "*PVP: " + pro.getPvp() +
-                    "*ESTOC-MIN: " + pro.getStockminim());
+            System.out.println("ID => " + idproducte + " : " + pro.getDescripcio() +
+                    "\n\t*ESTOC-ACT: " + pro.getStockactual() + "\n\t*PVP: " + pro.getPvp() +
+                    "\n\t*ESTOC-MIN: " + pro.getStockminim() + "\n");
             
             if (quantitat > 0) {
                 java.sql.Date dataActual = getCurrentDate();
@@ -99,7 +111,7 @@ public class OmplirVenda {
     
     private static int obtenirNumComanda(ODB odb) {
         Values val4 = odb.getValues(new
-            ValuesCriteriaQuery(Comanda.class).max("numComanda", "com_max"));
+            ValuesCriteriaQuery(Comanda.class).max("numcomanda", "com_max"));
         ObjectValues ov4 = val4.nextValues();
         BigDecimal maxim = (BigDecimal) ov4.getByAlias("com_max");
         
@@ -108,10 +120,10 @@ public class OmplirVenda {
     
     private static int obtenirNumVenda (ODB odb) {
         Values val4 = odb.getValues(new 
-            ValuesCriteriaQuery(Venda.class).max("numVenda", "ven_max"));
+            ValuesCriteriaQuery(Venda.class).max("numvenda", "ven_max"));
         
         ObjectValues ov4 = val4.nextValues();
-        BigDecimal maxim = (BigDecimal) ov4.getByAlias("com_max");
+        BigDecimal maxim = (BigDecimal) ov4.getByAlias("ven_max");
         
         return maxim.intValue()+1;
     }
