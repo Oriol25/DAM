@@ -38,8 +38,11 @@ public class OmplirVenda {
             idproducte = Integer.parseInt(args[0]);
             quantitat = Integer.parseInt(args[1]);
         } catch (ArrayIndexOutOfBoundsException e) {
+            System.out.print("ID del producte: ");
             idproducte = teclat.nextInt();
+            System.out.print("Quantitat: ");
             quantitat = teclat.nextInt();
+            System.out.println("");
         }
         
         ODB odb = ODBFactory.open("Producte_com.BD");
@@ -82,14 +85,15 @@ public class OmplirVenda {
         Comanda comanda = new Comanda();
         java.sql.Date dataActual = getCurrentDate();
         producte.addPropertyChangeListener(comanda);
-        
         int nouEstoc = producte.getStockactual() - quantitat;
         
         boolean actualitzar = false;
         
+        producte.setStockactual(nouEstoc);
+        
         if (comanda.isDemana()) {
             System.out.println("FER COMANDA EN PRODUCTE: "
-            + producte.getDescripcio() + " QUANTITAT" + quantitat);
+            + producte.getDescripcio() + " QUANTITAT " + quantitat);
             
             int numComanda = obtenirNumComanda(odb);
             comanda.setQuantitat(quantitat);
@@ -121,7 +125,6 @@ public class OmplirVenda {
     private static int obtenirNumVenda (ODB odb) {
         Values val4 = odb.getValues(new 
             ValuesCriteriaQuery(Venda.class).max("numvenda", "ven_max"));
-        
         ObjectValues ov4 = val4.nextValues();
         BigDecimal maxim = (BigDecimal) ov4.getByAlias("ven_max");
         

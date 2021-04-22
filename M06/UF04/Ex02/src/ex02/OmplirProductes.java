@@ -19,9 +19,9 @@ public class OmplirProductes {
        ODB odb = ODBFactory.open("Producte_com.BD");
     
     Producte p1 = new Producte(1, "Manaza",     10, 3, 10);
-    Producte p2 = new Producte(2, "Pera",       5, 4, 5);
-    Producte p3 = new Producte(3, "Coco",       8, 7, 20);
-    Producte p4 = new Producte(4, "Platano",    6, 6, 12);
+    Producte p2 = new Producte(2, "Pera",       5, 2, 5);
+    Producte p3 = new Producte(3, "Coco",       8, 3, 20);
+    Producte p4 = new Producte(4, "Platano",    6, 2, 12);
     Producte p5 = new Producte(5, "Fresa",      9, 4, 6);
     Producte p6 = new Producte(6, "Melocoton",  10, 5, 9);
     
