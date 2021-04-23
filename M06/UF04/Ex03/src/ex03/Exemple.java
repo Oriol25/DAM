@@ -54,7 +54,7 @@ public class Exemple {
             
             //Crear una venda
             System.out.println("====================================");
-            System.out.println("ES CREA VENDA DE ID 3 AMB QUANTITAT 2 ");
+            System.out.println("ES CREA VENDA DE ID " + producte + " AMB QUANTITAT " + quantitat);
             CrearVenda(bd, producte, quantitat);
             
             System.out.println("====================================");
