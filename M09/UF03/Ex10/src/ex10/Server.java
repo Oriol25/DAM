@@ -108,6 +108,8 @@ public class Server extends javax.swing.JFrame implements Runnable {
             btStart.setText("Iniciar Servidor");
             jlEstatServer.setText("Servidor apagado");
             
+            pararServidor();
+            
             serverStatus = false;
         }
 
@@ -135,6 +137,10 @@ public class Server extends javax.swing.JFrame implements Runnable {
             arrayThread[i].start();
 
         }
+    }
+    
+    public static void pararServidor() {
+        
     }
     
     @Override
