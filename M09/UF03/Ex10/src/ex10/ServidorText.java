@@ -19,11 +19,13 @@ public class ServidorText implements Runnable {
     ServerSocket server;
     static int numClient;
     String cadena = "";
+    String name;
 
     public ServidorText(Socket clientConnectat, ServerSocket server) {
 	this.client = clientConnectat;
 	this.server = server;
 	this.numClient ++;
+        this.name = null;
     }
         
     public static void main (String[] args) throws IOException {
@@ -62,7 +64,7 @@ public class ServidorText implements Runnable {
             BufferedReader fentrada = null;
 
             System.out.println("Esperant connexió... ");
-            System.out.println("Client " + this.numClient + " connectat... ");
+            System.out.println("Client " + this.name + " connectat... ");
 
             //FLUX DE SORTIDA AL CLIENT
             fsortida = new PrintWriter(this.client.getOutputStream(), true);
@@ -78,6 +80,10 @@ public class ServidorText implements Runnable {
                                 
                 if (!cadena.equals("*") && !cadena.equals("")) {
                     System.out.println("Rebent: "+cadena);
+                } else if (cadena.startsWith("LOGIN: ")) {
+                    
+                    this.name = cadena.substring(7, cadena.length()).toString();
+                    
                 } else {
                     break;
                 }
