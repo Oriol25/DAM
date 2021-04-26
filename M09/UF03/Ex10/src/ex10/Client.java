@@ -32,6 +32,9 @@ public class Client extends javax.swing.JFrame {
     //FLUX PER A ENTRADA ESTÀNDARD
     BufferedReader in;
     
+    //USUARIO LOGUEADO
+    boolean login = false;
+    
     public Client() throws IOException {
         this.client = new Socket(host, port);
         fsortida = new PrintWriter(client.getOutputStream(), true);
@@ -101,33 +104,35 @@ public class Client extends javax.swing.JFrame {
 
     private void jbSendActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbSendActionPerformed
         
-        if (tfChat.getText().startsWith("//log ")) {
+        if (tfChat.getText().startsWith("//log ") && !login) {
+            // PARA CUANDO EL USUARIO QUIERA INICIAR SESION
             String name = tfChat.getText().subSequence(6, tfChat.getText().length()).toString();
-            System.out.println(taChat.getName());
             taChat.setText(taChat.getText() + "Bienvenido " + name + "\n");
+            fsortida.println(tfChat.getText());
             
-            fsortida.println("LOGIN: " + name);
+            login = true;
             
             try {
                 eco = fentrada.readLine();
-                taChat.setText(taChat.getText() + tfChat.getText() + "\n");
             } catch (IOException ex) {
                 Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
             } 
             
         } else if (tfChat.getText().startsWith("//h")) {
+            //MOSTRAR TODOS LOS COMANDOS
             taChat.setText(taChat.getText() + "//log nombreDelUsuario = Iniciar sesion " + "\n");
             taChat.setText(taChat.getText() + "//h = Lista de comandos" + "\n");
             taChat.setText(taChat.getText() + "//exit = salir" + "\n");
             taChat.setText(taChat.getText() + "//clear = Limpiar pantalla" + "\n");
             
         } else if (tfChat.getText().startsWith("//clear")) {
+            //LIMPIAR PANTALLA
             taChat.setText("");
         } else if (tfChat.getText().startsWith("//exit")) {
+            //CERRAR EL CLIENTE
             try {
                 fsortida.close();
                 fentrada.close();
-                System.out.println("Finalització de l'enviament...");
                 in.close();
                 client.close();
                 dispose();
@@ -136,13 +141,15 @@ public class Client extends javax.swing.JFrame {
             }
             
         } else if (tfChat.getText().startsWith("//")) {
+            // EN CASO DE INTRODUCIR UN COMANDO ERRONEO
             taChat.setText(taChat.getText() + "No es un comando valido!" + "\n");
             taChat.setText(taChat.getText() + "//log nombreDelUsuario = Iniciar sesion " + "\n");
             taChat.setText(taChat.getText() + "//h = Lista de comandos" + "\n");
             taChat.setText(taChat.getText() + "//exit = salir" + "\n");
             taChat.setText(taChat.getText() + "//clear = Limpiar pantalla" + "\n");
         
-        } else {
+        } else if (login) {
+            //ENVIAR MENSAJES AL SERVIDOR
             fsortida.println(tfChat.getText());
             
             try {
@@ -151,6 +158,9 @@ public class Client extends javax.swing.JFrame {
             } catch (IOException ex) {
                 Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
             } 
+        } else {
+            // EL MENSAJE NO ES UN COMANDO NI EL USUARIO ESTA LOGUEADO
+            System.out.println("ERROR");
         }
 
         tfChat.setText("");

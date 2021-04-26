@@ -64,7 +64,7 @@ public class ServidorText implements Runnable {
             BufferedReader fentrada = null;
 
             System.out.println("Esperant connexió... ");
-            System.out.println("Client " + this.name + " connectat... ");
+            System.out.println("Client " + this.numClient + " connectat... ");
 
             //FLUX DE SORTIDA AL CLIENT
             fsortida = new PrintWriter(this.client.getOutputStream(), true);
@@ -77,15 +77,16 @@ public class ServidorText implements Runnable {
             while ((cadena = fentrada.readLine()) != null) {
 
                 fsortida.println(cadena);
-                                
-                if (!cadena.equals("*") && !cadena.equals("")) {
-                    System.out.println("Rebent: "+cadena);
-                } else if (cadena.startsWith("LOGIN: ")) {
+                
+                if (cadena.startsWith("//log ")) {
+                    this.name = cadena.substring(6, cadena.length()).toString();
+                    System.out.println("Usuario: " + this.name + " logueado");
                     
-                    this.name = cadena.substring(7, cadena.length()).toString();
-                    
+                } else if (this.name != null) {
+                    System.out.println("Rebent (" + this.name +"): " + cadena);              
                 } else {
-                    break;
+                    // USUARIO NO LOGUEADO
+                    System.out.println("Usuario no logueado: " + this.numClient);
                 }
 
             }
@@ -96,7 +97,6 @@ public class ServidorText implements Runnable {
             this.server.close();
 			
 	} catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
