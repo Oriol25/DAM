@@ -107,10 +107,10 @@ public class Client extends javax.swing.JFrame {
         if (tfChat.getText().startsWith("//log ") && !login) {
             // PARA CUANDO EL USUARIO QUIERA INICIAR SESION
             String name = tfChat.getText().subSequence(6, tfChat.getText().length()).toString();
-            taChat.setText(taChat.getText() + "Bienvenido " + name + "\n");
+            //taChat.setText(taChat.getText() + "Bienvenido " + name + "\n");
             fsortida.println(tfChat.getText());
             
-            login = true;
+            login = true;     
             
             try {
                 eco = fentrada.readLine();
@@ -118,18 +118,21 @@ public class Client extends javax.swing.JFrame {
                 Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
             } 
             
-        } else if (tfChat.getText().startsWith("//h")) {
+        } else if (tfChat.getText().equals("//h")) {
             //MOSTRAR TODOS LOS COMANDOS
             taChat.setText(taChat.getText() + "//log nombreDelUsuario = Iniciar sesion " + "\n");
             taChat.setText(taChat.getText() + "//h = Lista de comandos" + "\n");
             taChat.setText(taChat.getText() + "//exit = salir" + "\n");
             taChat.setText(taChat.getText() + "//clear = Limpiar pantalla" + "\n");
             
-        } else if (tfChat.getText().startsWith("//clear")) {
-            //LIMPIAR PANTALLA
+        } else if (tfChat.getText().equals("//clear")) {
+            //LIMPIAR PANTALLA<
             taChat.setText("");
-        } else if (tfChat.getText().startsWith("//exit")) {
+        } else if (tfChat.getText().equals("//exit")) {
             //CERRAR EL CLIENTE
+            
+            fsortida.println("//exit");
+            
             try {
                 fsortida.close();
                 fentrada.close();
@@ -154,7 +157,7 @@ public class Client extends javax.swing.JFrame {
             
             try {
                 eco = fentrada.readLine();
-                taChat.setText(taChat.getText() + tfChat.getText() + "\n");
+                taChat.setText(taChat.getText() + eco + "\n");
             } catch (IOException ex) {
                 Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
             } 
@@ -194,14 +197,19 @@ public class Client extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
+                
+                Client client;
+                
                 try {
-                    new Client().setVisible(true);
+                    client = new Client();
+                    client.setVisible(true);
                 } catch (IOException ex) {
                     Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         });
     }
+      
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane jScrollPane1;
