@@ -107,7 +107,7 @@ public class Client extends javax.swing.JFrame {
         if (tfChat.getText().startsWith("//log ") && !login) {
             // PARA CUANDO EL USUARIO QUIERA INICIAR SESION
             String name = tfChat.getText().subSequence(6, tfChat.getText().length()).toString();
-            //taChat.setText(taChat.getText() + "Bienvenido " + name + "\n");
+            taChat.setText(taChat.getText() + "Bienvenido " + name + "\n");
             fsortida.println(tfChat.getText());
             
             login = true;     
@@ -116,7 +116,7 @@ public class Client extends javax.swing.JFrame {
                 eco = fentrada.readLine();
             } catch (IOException ex) {
                 Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
-            } 
+            }
             
         } else if (tfChat.getText().equals("//h")) {
             //MOSTRAR TODOS LOS COMANDOS
@@ -126,7 +126,7 @@ public class Client extends javax.swing.JFrame {
             taChat.setText(taChat.getText() + "//clear = Limpiar pantalla" + "\n");
             
         } else if (tfChat.getText().equals("//clear")) {
-            //LIMPIAR PANTALLA<
+            //LIMPIAR PANTALLA
             taChat.setText("");
         } else if (tfChat.getText().equals("//exit")) {
             //CERRAR EL CLIENTE
@@ -160,7 +160,7 @@ public class Client extends javax.swing.JFrame {
                 taChat.setText(taChat.getText() + eco + "\n");
             } catch (IOException ex) {
                 Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
-            } 
+            }
         } else {
             // EL MENSAJE NO ES UN COMANDO NI EL USUARIO ESTA LOGUEADO
             System.out.println("ERROR");
