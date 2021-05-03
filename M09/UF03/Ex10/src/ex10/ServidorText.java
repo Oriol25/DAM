@@ -6,49 +6,97 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.Scanner;
 
 public class ServidorText implements Runnable {
 
-    static Socket client;
-    ServerSocket server;
+    // CANTIDAD DE CLIENTES TOTALES
+    static int totalCLients;
+    
+    // IDENTIFICADOR DEL CLIENTE
     static int numClient;
-    static int numClients;
-    String cadena = "";
+    
+    //CLIENTES
+    static Socket client;
+    static Socket[] totalClients;
+    
+    //SERVER
+    ServerSocket server;
+    
+    //NOMBRE DEL CLIENTE
     String name;
+    
+    // GUARDAR MENSAJE RECIBIDO DEL CLIENTE
+    String cadena = "";
+    
+    //SCANNER DEL TECLAT
+    static Scanner teclado = new Scanner(System.in);
+    
 
-    public ServidorText(Socket clientConnectat, ServerSocket server) {
-        this.numClient ++;
+    public ServidorText(Socket clientConnectat, ServerSocket server, Socket[] totalClients, String name) {
 	this.client = clientConnectat;
 	this.server = server;	
-        this.name = null;
+        this.totalClients = totalClients;
+        this.name = name;
+        this.numClient ++;
     }
         
     public static void main (String[] args) throws IOException {
 
-        Scanner teclado = new Scanner(System.in);
-
+        //PORT DEL SERVIDOR
         int numPort = 60000;
+        
+        //INICIAR EL SERVIDOR
         ServerSocket servidor = new ServerSocket(numPort);
 
+        //DEMANEM EL MAXIM DE CLIENT
         System.out.print("Clients totals: ");
-        numClients = teclado.nextInt();
+        totalCLients = teclado.nextInt();
         
-
-        Runnable[] arrayRunnable = new Runnable[numClients];
-        Thread[] arrayThread = new Thread[numClients];
+        totalClients = new Socket[totalCLients];
+        
+        //INICIEM ELS FILS
+        ServidorText[] arrayRunnable = new ServidorText[totalCLients];
+        Thread[] arrayThread = new Thread[totalCLients];
+        
+        //Booleans
+        boolean isNull;
+        boolean clientStop;
 	
         // Determinem les vegades que es conectaran els clients
         for (int i = 0; i < arrayRunnable.length; i++) {
 
-            Socket clientConnectat = servidor.accept();
+            isNull = true;
+            clientStop = false;
+            
+            try {
+                client = servidor.accept();
+            } catch (SocketException e) {
+                isNull = false;
+            }
+            
+            for (int j = 0; j <totalClients.length; j++) {
+                
+                if (totalClients[i] == null && clientStop == false) {
+                    
+                    totalClients[i] = client;
+                    clientStop = true;
+                    
+                }
+                
+            }
 
-            // Runnable
-            arrayRunnable[i] = new ServidorText(clientConnectat, servidor);
+            if(isNull) {
+                // Runnable
+                arrayRunnable[i] = new ServidorText(client, servidor, totalClients, null);
 
-            // Thread
-            arrayThread[i] = new Thread(arrayRunnable[i]);
-            arrayThread[i].start();
+                // Thread
+                arrayThread[i] = new Thread(arrayRunnable[i]);
+                arrayThread[i].start();
+            }
+            
+            
 
         }
     }
@@ -63,21 +111,51 @@ public class ServidorText implements Runnable {
             System.out.println("Esperant connexió... ");
             System.out.println("Client " + this.numClient + " connectat... ");
 
-            //FLUX DE SORTIDA AL CLIENT
-            fsortida = new PrintWriter(this.client.getOutputStream(), true);
+            boolean estadoServer = true;
 
-
-            //FLUX D'ENTRADA DEL CLIENT
-            fentrada = new BufferedReader(new InputStreamReader(this.client.getInputStream()));
-
-
-            while ((cadena = fentrada.readLine()) != null) {
-                System.out.println("Reben: " + cadena);
+            while (estadoServer) {
                 
-                fsortida.println(cadena);
+                try {
+                    //FLUX DE SORTIDA AL CLIENT
+                    fsortida = new PrintWriter(this.client.getOutputStream(), true);
+
+                    //FLUX D'ENTRADA DEL CLIENT
+                    fentrada = new BufferedReader(new InputStreamReader(this.client.getInputStream()));
+            
+                } catch (SocketException e) {
+                    estadoServer = false;
+                }
                 
+                while (estadoServer) {
+                    
+                    try {
+                        cadena = fentrada.readLine();
+                    } catch (SocketException e) {estadoServer = false;}
+                    
+                    if (cadena.equals("//exit")) 
+                        estadoServer = false;
+                    
+                    if (estadoServer) {
+                        
+                        fsortida.println(cadena);
+                        
+                        if (cadena != null) {
+                            for (int i = 0; i < totalClients.length; i++) {
+
+				if (totalClients[i] != null) {
+                                    fsortida = new PrintWriter(this.totalClients[i].getOutputStream(), true);
+                                    fsortida.println(cadena);
+				}
+                            }
+
+			System.out.println("Rebent: "+cadena);
+                        }
+                    }
+                        
+                }
+                    
             }
-                          
+            
             fentrada.close();
             fsortida.close();
             this.client.close();

@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -21,7 +22,7 @@ public class Client extends javax.swing.JFrame {
 
     String host = "localhost";
     int port = 60000;
-    Socket client;
+    static Socket clientS;
     
     //FLUX DE SORTIDA AL SERVIDOR
     PrintWriter fsortida;
@@ -35,11 +36,16 @@ public class Client extends javax.swing.JFrame {
     //USUARIO LOGUEADO
     boolean login = false;
     
+    boolean cliente = false;
+    
     public Client() throws IOException {
-        this.client = new Socket(host, port);
-        fsortida = new PrintWriter(client.getOutputStream(), true);
-        fentrada = new BufferedReader(new InputStreamReader(client.getInputStream()));
+        this.clientS = new Socket(host, port);
+        fsortida = new PrintWriter(clientS.getOutputStream(), true);
+        fentrada = new BufferedReader(new InputStreamReader(clientS.getInputStream()));
         in = new BufferedReader(new InputStreamReader(System.in));
+        
+        ClientRun run = new ClientRun(fentrada, taChat, clientS);
+        run.start();
         
         initComponents();
     }
@@ -60,9 +66,10 @@ public class Client extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        taChat.setEditable(false);
         taChat.setColumns(20);
         taChat.setRows(5);
-        taChat.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        taChat.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         taChat.setFocusable(false);
         jScrollPane1.setViewportView(taChat);
 
@@ -107,10 +114,11 @@ public class Client extends javax.swing.JFrame {
         if (tfChat.getText().startsWith("//log ") && !login) {
             // PARA CUANDO EL USUARIO QUIERA INICIAR SESION
             String name = tfChat.getText().subSequence(6, tfChat.getText().length()).toString();
-            taChat.setText(taChat.getText() + "Bienvenido " + name + "\n");
+            taChat.append("Bienvenido " + name + "\n");
             fsortida.println(tfChat.getText());
             
-            login = true;     
+            login = true;
+            cliente = true;
             
             try {
                 eco = fentrada.readLine();
@@ -120,24 +128,26 @@ public class Client extends javax.swing.JFrame {
             
         } else if (tfChat.getText().equals("//h")) {
             //MOSTRAR TODOS LOS COMANDOS
-            taChat.setText(taChat.getText() + "//log nombreDelUsuario = Iniciar sesion " + "\n");
-            taChat.setText(taChat.getText() + "//h = Lista de comandos" + "\n");
-            taChat.setText(taChat.getText() + "//exit = salir" + "\n");
-            taChat.setText(taChat.getText() + "//clear = Limpiar pantalla" + "\n");
+            taChat.append("//log nombreDelUsuario = Iniciar sesion" + "\n");
+            taChat.append("//h = Lista de comandos" + "\n");
+            taChat.append("//exit = salir" + "\n");
+            taChat.append("//clear = Limpiar pantalla" + "\n");
             
         } else if (tfChat.getText().equals("//clear")) {
             //LIMPIAR PANTALLA
-            taChat.setText("");
+            taChat.append("");
         } else if (tfChat.getText().equals("//exit")) {
             //CERRAR EL CLIENTE
             
             fsortida.println("//exit");
             
+            cliente = false;
+            
             try {
                 fsortida.close();
                 fentrada.close();
                 in.close();
-                client.close();
+                clientS.close();
                 dispose();
             } catch (IOException ex) {
                 Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
@@ -145,11 +155,11 @@ public class Client extends javax.swing.JFrame {
             
         } else if (tfChat.getText().startsWith("//")) {
             // EN CASO DE INTRODUCIR UN COMANDO ERRONEO
-            taChat.setText(taChat.getText() + "No es un comando valido!" + "\n");
-            taChat.setText(taChat.getText() + "//log nombreDelUsuario = Iniciar sesion " + "\n");
-            taChat.setText(taChat.getText() + "//h = Lista de comandos" + "\n");
-            taChat.setText(taChat.getText() + "//exit = salir" + "\n");
-            taChat.setText(taChat.getText() + "//clear = Limpiar pantalla" + "\n");
+            taChat.append("No es un comando valido!" + "\n");
+            taChat.append("//log nombreDelUsuario = Iniciar sesion" + "\n");
+            taChat.append("//h = Lista de comandos" + "\n");
+            taChat.append("//exit = salir" + "\n");
+            taChat.append("//clear = Limpiar pantalla" + "\n");
         
         } else if (login) {
             //ENVIAR MENSAJES AL SERVIDOR
@@ -157,7 +167,7 @@ public class Client extends javax.swing.JFrame {
             
             try {
                 eco = fentrada.readLine();
-                taChat.setText(taChat.getText() + eco + "\n");
+                taChat.append(eco + "\n");
             } catch (IOException ex) {
                 Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -170,7 +180,7 @@ public class Client extends javax.swing.JFrame {
         
     }//GEN-LAST:event_jbSendActionPerformed
     
-    public static void main(String args[]) {
+    public static void main(String args[]) throws IOException {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -203,12 +213,14 @@ public class Client extends javax.swing.JFrame {
                 try {
                     client = new Client();
                     client.setVisible(true);
+
                 } catch (IOException ex) {
                     Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         });
     }
+   
       
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
