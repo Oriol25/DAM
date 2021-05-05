@@ -32,19 +32,14 @@ public class ClientRun  extends Thread{
     @Override
     public void run() {
         try {
-            
+            fentrada = new BufferedReader(new InputStreamReader(client.getInputStream()));
+
             while ((cadena = fentrada.readLine()) != null) {
-                fentrada = new BufferedReader(new InputStreamReader(client.getInputStream()));
-                System.out.println(cadena);
+                
                 
                 if (cadena != null) {
-                    System.out.println(cadena);
-                } else {
-                    System.out.println("null");
-                }
-                
-                if (!cadena.startsWith("//")) {
                     taChat.setText(taChat.getText() + "\n" + cadena);
+                    System.out.println(cadena);
                 }
                 
 

@@ -24,9 +24,6 @@ public class ServidorText implements Runnable {
     //SERVER
     ServerSocket server;
     
-    //NOMBRE DEL CLIENTE
-    String name;
-    
     // GUARDAR MENSAJE RECIBIDO DEL CLIENTE
     String cadena = "";
     
@@ -34,11 +31,10 @@ public class ServidorText implements Runnable {
     static Scanner teclado = new Scanner(System.in);
     
 
-    public ServidorText(Socket clientConnectat, ServerSocket server, Socket[] totalClients, String name) {
+    public ServidorText(Socket clientConnectat, ServerSocket server, Socket[] totalClients) {
 	this.client = clientConnectat;
 	this.server = server;	
         this.totalClients = totalClients;
-        this.name = name;
         this.numClient ++;
     }
         
@@ -89,7 +85,7 @@ public class ServidorText implements Runnable {
 
             if(isNull) {
                 // Runnable
-                arrayRunnable[i] = new ServidorText(client, servidor, totalClients, null);
+                arrayRunnable[i] = new ServidorText(client, servidor, totalClients);
 
                 // Thread
                 arrayThread[i] = new Thread(arrayRunnable[i]);
@@ -121,7 +117,11 @@ public class ServidorText implements Runnable {
 
                     //FLUX D'ENTRADA DEL CLIENT
                     fentrada = new BufferedReader(new InputStreamReader(this.client.getInputStream()));
-            
+                    
+                    if ((cadena = fentrada.readLine()) != null) {
+                        cadena = cadena.replace("//log ", "");
+                        System.out.println("Nom: " + cadena);
+                    }
                 } catch (SocketException e) {
                     estadoServer = false;
                 }
@@ -130,6 +130,7 @@ public class ServidorText implements Runnable {
                     
                     try {
                         cadena = fentrada.readLine();
+                        
                     } catch (SocketException e) {estadoServer = false;}
                     
                     if (cadena.equals("//exit")) 
@@ -137,18 +138,21 @@ public class ServidorText implements Runnable {
                     
                     if (estadoServer) {
                         
-                        fsortida.println(cadena);
-                        
                         if (cadena != null) {
                             for (int i = 0; i < totalClients.length; i++) {
-
 				if (totalClients[i] != null) {
-                                    fsortida = new PrintWriter(this.totalClients[i].getOutputStream(), true);
-                                    fsortida.println(cadena);
+                                    
+                                    try {
+                                        fsortida = new PrintWriter(this.totalClients[i].getOutputStream(), true);
+                                        fsortida.println(cadena);
+                                    } catch (SocketException e) {
+                                        
+                                    }
 				}
                             }
 
-			System.out.println("Rebent: "+cadena);
+			System.out.println("Reben :" + cadena);
+                        
                         }
                     }
                         
@@ -161,8 +165,8 @@ public class ServidorText implements Runnable {
             this.client.close();
             this.server.close();
 			
-	} catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException s) {
+            
         }
     }
 }

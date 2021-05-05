@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.net.SocketException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -29,20 +28,15 @@ public class Client extends javax.swing.JFrame {
 		
     //FLUX D'ENTRADA AL SERVIDOR
     BufferedReader fentrada;
-		
-    //FLUX PER A ENTRADA ESTÀNDARD
-    BufferedReader in;
     
     //USUARIO LOGUEADO
-    boolean login = false;
-    
-    boolean cliente = false;
+    boolean login = false; 
+
     
     public Client() throws IOException {
         this.clientS = new Socket(host, port);
         fsortida = new PrintWriter(clientS.getOutputStream(), true);
         fentrada = new BufferedReader(new InputStreamReader(clientS.getInputStream()));
-        in = new BufferedReader(new InputStreamReader(System.in));
         
         ClientRun run = new ClientRun(fentrada, taChat, clientS);
         run.start();
@@ -118,7 +112,6 @@ public class Client extends javax.swing.JFrame {
             fsortida.println(tfChat.getText());
             
             login = true;
-            cliente = true;
             
             try {
                 eco = fentrada.readLine();
@@ -141,12 +134,9 @@ public class Client extends javax.swing.JFrame {
             
             fsortida.println("//exit");
             
-            cliente = false;
-            
             try {
                 fsortida.close();
                 fentrada.close();
-                in.close();
                 clientS.close();
                 dispose();
             } catch (IOException ex) {
@@ -219,9 +209,7 @@ public class Client extends javax.swing.JFrame {
                 }
             }
         });
-    }
-   
-      
+    }     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane jScrollPane1;
